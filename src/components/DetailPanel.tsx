@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Hotspot } from '../types';
 import { detailForHotspot, evidenceById, hotspotById, sentenceById } from '../data';
 import { Visual, type VisualId } from '../visuals';
@@ -35,6 +35,7 @@ export function DetailPanel({
 }: Props) {
   const detail = hotspot ? detailForHotspot(hotspot.id) : undefined;
   const [tab, setTab] = useState<Tab>('evidence');
+  const bodyRef = useRef<HTMLDivElement>(null);
 
   // 다른 표현으로 옮기면: 직전 화면에서 그림을 요청했고 그림이 있으면 그림 탭
   useEffect(() => {
@@ -42,7 +43,12 @@ export function DetailPanel({
     if (preferVisual) sessionStorage.removeItem('ksa.openVisual');
     const hasVisual = Boolean(hotspot && detailForHotspot(hotspot.id)?.visuals?.length);
     setTab(preferVisual && hasVisual ? 'visual' : 'evidence');
+    bodyRef.current?.scrollTo({ top: 0 });
   }, [hotspot?.id]);
+
+  useEffect(() => {
+    bodyRef.current?.scrollTo({ top: 0 });
+  }, [tab]);
 
   const evidences = useMemo(() => {
     if (!detail) return [];
@@ -111,8 +117,8 @@ export function DetailPanel({
 
   return (
     <aside className="detail" aria-label="상세 정보">
-      {/* ── 고정 헤더 */}
-      <div className="detail-head">
+      {/* 모바일에서도 탭 바로 위만 고정 — 본문 영역을 크게 */}
+      <div className="detail-chrome">
         <div className="detail-toolbar">
           <div className="detail-nav">
             <button onClick={onPrev} title="이전 표현 (←)" aria-label="이전 표현">
@@ -129,27 +135,10 @@ export function DetailPanel({
 
         <blockquote className="phrase">{hotspot.exactText}</blockquote>
 
-        <p className="one-liner">
-          <span className="one-liner-tag">한 줄</span>
-          {hotspot.tooltip}
-        </p>
-
         <div className="badge-row tight">
           <PriorityBadge p={hotspot.priority} />
           {highCount > 0 && <RiskBadge level="HIGH" />}
         </div>
-
-        <details className="why-fold">
-          <summary>왜 중요한지</summary>
-          <p className="why">{detail.whyItMatters}</p>
-        </details>
-
-        {sentence && (
-          <details className="in-context">
-            <summary>원문 문장</summary>
-            <p>{sentence.text}</p>
-          </details>
-        )}
 
         <nav className="d-tabs" role="tablist">
           {TABS.map((t) => (
@@ -169,8 +158,19 @@ export function DetailPanel({
         </nav>
       </div>
 
-      {/* ── 탭 내용 */}
-      <div className="detail-body" role="tabpanel">
+      {/* ── 탭 내용 (여기가 큰 스크롤 영역) */}
+      <div className="detail-body" role="tabpanel" ref={bodyRef}>
+        <p className="one-liner">
+          <span className="one-liner-tag">한 줄</span>
+          {hotspot.tooltip}
+        </p>
+
+        <details className="why-fold">
+          <summary>왜 중요한지 · 원문</summary>
+          <p className="why">{detail.whyItMatters}</p>
+          {sentence && <p className="why-sentence">{sentence.text}</p>}
+        </details>
+
         {tab === 'evidence' && (
           <>
             {hiddenCount > 0 && (

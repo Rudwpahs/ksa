@@ -730,6 +730,15 @@ code {
   color: var(--ink-2);
 }
 
+.why-sentence {
+  margin: 0 0 12px;
+  padding-left: 12px;
+  border-left: 2px solid var(--line);
+  font-size: 13.5px;
+  line-height: 1.7;
+  color: var(--ink-3);
+}
+
 /* LUNDA loop visual */
 .lunda-loop .viz-lead {
   margin: 0 0 12px;
@@ -1329,7 +1338,8 @@ code {
   color: var(--ink-3);
 }
 
-/* 고정 헤더 */
+/* 상단 크롬: 툴바 + 짧은 표현 + 탭만 (본문은 detail-body) */
+.detail-chrome,
 .detail-head {
   flex: none;
   padding: 12px 22px 0;
@@ -3230,12 +3240,14 @@ body.sheet-open {
     touch-action: pan-y;
   }
 
+  .detail-chrome,
   .detail-head {
-    padding: 6px 14px 0;
+    padding: 4px 12px 0;
     border-radius: 18px 18px 0 0;
     flex: none;
   }
 
+  .detail-chrome::before,
   .detail-head::before {
     content: "";
     display: block;
@@ -3243,19 +3255,57 @@ body.sheet-open {
     height: 4px;
     border-radius: 999px;
     background: var(--line);
-    margin: 4px auto 8px;
+    margin: 4px auto 6px;
   }
 
-  .phrase { font-size: 16px; line-height: 1.45; }
+  .detail-toolbar {
+    margin-bottom: 6px;
+  }
+
+  .detail-toolbar button {
+    min-height: 36px;
+    padding: 4px 12px;
+  }
+
+  .phrase {
+    margin: 0 0 6px;
+    padding: 8px 10px;
+    font-size: 14.5px;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .badge-row.tight {
+    margin-bottom: 4px;
+  }
+
+  .d-tabs {
+    margin: 0 -4px;
+    padding-bottom: 0;
+  }
 
   .detail-body {
-    flex: 1;
-    min-height: 0;
+    flex: 1 1 auto;
+    min-height: 55dvh;
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
-    padding: 14px 14px calc(28px + env(safe-area-inset-bottom, 0px));
+    padding: 12px 14px calc(28px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .one-liner {
+    margin-bottom: 8px;
+    padding: 8px 10px;
+    font-size: 13.5px;
+  }
+
+  .why-fold {
+    margin-bottom: 12px;
   }
 
   .d-tabs {
