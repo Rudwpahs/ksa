@@ -21,6 +21,8 @@ interface Props {
   onClose: () => void;
   onPrev: () => void;
   onNext: () => void;
+  topCollapsed?: boolean;
+  onToggleTop?: () => void;
 }
 
 export function DetailPanel({
@@ -32,6 +34,8 @@ export function DetailPanel({
   onClose,
   onPrev,
   onNext,
+  topCollapsed,
+  onToggleTop,
 }: Props) {
   const detail = hotspot ? detailForHotspot(hotspot.id) : undefined;
   const [tab, setTab] = useState<Tab>('evidence');
@@ -119,6 +123,12 @@ export function DetailPanel({
     <aside className="detail" aria-label="상세 정보">
       {/* 모바일에서도 탭 바로 위만 고정 — 본문 영역을 크게 */}
       <div className="detail-chrome">
+        <button
+          type="button"
+          className="detail-handle"
+          aria-label={topCollapsed ? '상단바 펼치기' : '시트를 맨 위로'}
+          onClick={() => onToggleTop?.()}
+        />
         <div className="detail-toolbar">
           <div className="detail-nav">
             <button onClick={onPrev} title="이전 표현 (←)" aria-label="이전 표현">
@@ -128,9 +138,21 @@ export function DetailPanel({
               →
             </button>
           </div>
-          <button className="detail-close" onClick={onClose} title="닫기 (Esc)">
-            닫기 ✕
-          </button>
+          <div className="detail-toolbar-right">
+            {onToggleTop && (
+              <button
+                type="button"
+                className="detail-top-toggle"
+                onClick={onToggleTop}
+                title={topCollapsed ? '상단바 펼치기' : '상단바 접고 맨 위로'}
+              >
+                {topCollapsed ? '▾ 상단' : '▴ 맨위'}
+              </button>
+            )}
+            <button className="detail-close" onClick={onClose} title="닫기 (Esc)">
+              닫기 ✕
+            </button>
+          </div>
         </div>
 
         <blockquote className="phrase">{hotspot.exactText}</blockquote>

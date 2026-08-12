@@ -261,6 +261,60 @@ code {
   font-size: 15px;
 }
 
+.topbar-fold {
+  display: none;
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgb(255 255 255 / 34%);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 14px;
+  line-height: 1;
+  background: rgb(255 255 255 / 12%);
+}
+
+.topbar-fold:hover {
+  background: rgb(255 255 255 / 22%);
+}
+
+.topbar-peek {
+  display: none;
+}
+
+.detail-handle {
+  display: none;
+  border: none;
+  background: transparent;
+  padding: 8px 0 4px;
+  width: 100%;
+  cursor: pointer;
+}
+
+.detail-handle::before {
+  content: "";
+  display: block;
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--line);
+  margin: 0 auto;
+}
+
+.detail-toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: auto;
+}
+
+.detail-top-toggle {
+  display: none;
+}
+
+.app.topbar-collapsed .topbar {
+  display: none;
+}
+
 /* ═════════════ Subbar */
 .subbar {
   display: flex;
@@ -3154,6 +3208,34 @@ body.sheet-open {
     flex-wrap: nowrap;
   }
 
+  .topbar-fold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .topbar-peek {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 80;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 28px;
+    padding: 4px 10px;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    background: var(--navy);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+  }
+
+  .app.has-sheet.topbar-collapsed .topbar-peek {
+    display: none;
+  }
+
   .brand-kicker { display: none; }
   .brand-title { font-size: 15px; }
 
@@ -3238,6 +3320,14 @@ body.sheet-open {
     background: var(--surface);
   }
 
+  /* 상단 접힘 → 시트 화면 맨 위까지 */
+  .app.topbar-collapsed .detail:not(.detail-empty) {
+    top: 0;
+    border-radius: 0;
+    padding-top: env(safe-area-inset-top, 0px);
+    z-index: 85;
+  }
+
   /* 스크림만 뚫고, 상단바(80)·시트(60) 아래 — Q메뉴는 시트에 가려도 ←→로 이동 */
   .app.has-sheet .hotspot {
     position: relative;
@@ -3252,20 +3342,33 @@ body.sheet-open {
 
   .detail-chrome,
   .detail-head {
-    padding: 2px 12px 0;
+    padding: 0 12px;
     border-radius: 16px 16px 0 0;
     flex: none;
   }
 
+  .app.topbar-collapsed .detail-chrome,
+  .app.topbar-collapsed .detail-head {
+    border-radius: 0;
+  }
+
   .detail-chrome::before,
   .detail-head::before {
-    content: "";
+    content: none;
+    display: none;
+  }
+
+  .detail-handle {
     display: block;
-    width: 36px;
-    height: 4px;
-    border-radius: 999px;
-    background: var(--line);
-    margin: 6px auto 4px;
+  }
+
+  .detail-top-toggle {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 700;
   }
 
   .detail-toolbar { margin-bottom: 4px; }

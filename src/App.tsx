@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { QuestionId, Tag } from './types';
 import {
   detailForHotspot,
@@ -58,6 +58,7 @@ export default function App() {
   const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('ksa.theme', 'light');
   const [bankLaunch, setBankLaunch] = useState<BankLaunch>(null);
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [topCollapsed, setTopCollapsed] = useState(false);
 
   const starred = useIdSet('ksa.starredQuestions');
   const flagChecks = useIdSet('ksa.flagChecks');
@@ -132,6 +133,15 @@ export default function App() {
     };
   }, [view, selected]);
 
+  // 모바일: 시트 처음 열릴 때만 상단 접기 / 닫을 때 펼치기
+  const prevSelected = useRef<string | null>(null);
+  useEffect(() => {
+    const mobile = window.matchMedia('(max-width: 1000px)').matches;
+    if (selected && !prevSelected.current && mobile) setTopCollapsed(true);
+    if (!selected && prevSelected.current) setTopCollapsed(false);
+    prevSelected.current = selected;
+  }, [selected]);
+
   // 자소서를 떠나면 선택 해제 (홈에서 탭바 사라지는 버그 방지)
   useEffect(() => {
     if (view !== 'essay' && selected) setSelected(null);
@@ -171,7 +181,9 @@ export default function App() {
   };
 
   return (
-    <div className={`app view-${view}${view === 'essay' && selected ? ' has-sheet' : ''}`}>
+    <div
+      className={`app view-${view}${view === 'essay' && selected ? ' has-sheet' : ''}${topCollapsed ? ' topbar-collapsed' : ''}`}
+    >
       <header className="topbar">
         <div className="brand">
           <span className="brand-kicker">KSA 3차</span>
@@ -207,8 +219,29 @@ export default function App() {
           >
             {theme === 'light' ? '☾' : '☀'}
           </button>
+          <button
+            type="button"
+            className="topbar-fold"
+            onClick={() => setTopCollapsed((v) => !v)}
+            title={topCollapsed ? '상단바 펼치기' : '상단바 접기'}
+            aria-label={topCollapsed ? '상단바 펼치기' : '상단바 접기'}
+            aria-expanded={!topCollapsed}
+          >
+            {topCollapsed ? '▾' : '▴'}
+          </button>
         </div>
       </header>
+
+      {topCollapsed && (
+        <button
+          type="button"
+          className="topbar-peek"
+          onClick={() => setTopCollapsed(false)}
+          aria-label="상단바 펼치기"
+        >
+          ▾ 상단
+        </button>
+      )}
 
       {problems.length > 0 && (
         <div className="data-error">
@@ -314,6 +347,8 @@ export default function App() {
               onClose={() => setSelected(null)}
               onPrev={() => step(-1)}
               onNext={() => step(1)}
+              topCollapsed={topCollapsed}
+              onToggleTop={() => setTopCollapsed((v) => !v)}
             />
           </>
         )}
