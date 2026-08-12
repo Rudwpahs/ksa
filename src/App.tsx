@@ -19,6 +19,7 @@ import { useIdSet, useLocalStorage } from './hooks/useLocalStorage';
 import './styles.css';
 
 type View = 'overview' | 'essay' | 'bank' | 'flags';
+type BankLaunch = { drill?: boolean; onlyS?: boolean } | null;
 
 const FILTERS: Array<{ id: 'ALL' | Tag; label: string }> = [
   { id: 'ALL', label: '전체' },
@@ -32,7 +33,13 @@ const FILTERS: Array<{ id: 'ALL' | Tag; label: string }> = [
   { id: 'COLLAB', label: '협업' },
 ];
 
-/** #/q4/h4-seat 형태의 딥링크를 읽고 쓴다. */
+const NAV: Array<[View, string, string]> = [
+  ['overview', '직전', '할 일'],
+  ['essay', '자소서', '원문'],
+  ['bank', '연습', '질문'],
+  ['flags', '고칠말', '위험'],
+];
+
 function readHash(): { q: QuestionId; h: string | null } {
   const raw = window.location.hash.replace(/^#\/?/, '');
   const [q, h] = raw.split('/');
@@ -49,17 +56,17 @@ export default function App() {
   const [filter, setFilter] = useState<'ALL' | Tag>('ALL');
   const [panelOnly, setPanelOnly] = useLocalStorage('ksa.panelOnly', false);
   const [theme, setTheme] = useLocalStorage<'light' | 'dark'>('ksa.theme', 'light');
+  const [bankLaunch, setBankLaunch] = useState<BankLaunch>(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const starred = useIdSet('ksa.starredQuestions');
   const flagChecks = useIdSet('ksa.flagChecks');
-
   const problems = useMemo(() => validateData(), []);
 
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
   }, [theme]);
 
-  // 상태 → URL
   useEffect(() => {
     const next = `#/${qid}${selected ? `/${selected}` : ''}`;
     if (window.location.hash !== next) {
@@ -67,7 +74,6 @@ export default function App() {
     }
   }, [qid, selected]);
 
-  // URL → 상태 (뒤로가기)
   useEffect(() => {
     const onHash = () => {
       const { q, h } = readHash();
@@ -102,7 +108,6 @@ export default function App() {
     [selected],
   );
 
-  // 키보드 이동
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const el = e.target as HTMLElement;
@@ -116,11 +121,19 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, [step, view]);
 
-  // 검색 + 태그 필터. 결과가 없으면 null(=필터 없음)을 넘긴다.
+  // 시트가 열린 동안 배경 스크롤 잠금 (모바일)
+  useEffect(() => {
+    if (view === 'essay' && selected) {
+      document.body.classList.add('sheet-open');
+    } else {
+      document.body.classList.remove('sheet-open');
+    }
+    return () => document.body.classList.remove('sheet-open');
+  }, [view, selected]);
+
   const matched = useMemo(() => {
     const q = query.trim();
     if (!q && filter === 'ALL') return null;
-
     const hit = new Set<string>();
     for (const h of hotspots) {
       if (filter !== 'ALL' && !h.tags.includes(filter)) continue;
@@ -146,23 +159,21 @@ export default function App() {
   const selectedHotspot = selected ? (hotspotById.get(selected) ?? null) : null;
   const matchCount = matched?.size ?? null;
 
+  const openBank = (opts?: { drill?: boolean; onlyS?: boolean }) => {
+    setBankLaunch(opts ?? null);
+    setView('bank');
+  };
+
   return (
-    <div className="app">
+    <div className={`app view-${view}${selected ? ' has-sheet' : ''}`}>
       <header className="topbar">
         <div className="brand">
-          <span className="brand-kicker">KSA 3RD STAGE</span>
-          <h1 className="brand-title">자기소개서 EVIDENCE MAP</h1>
+          <span className="brand-kicker">KSA 3차</span>
+          <h1 className="brand-title">면접 직전 맵</h1>
         </div>
 
-        <nav className="views" aria-label="화면 전환">
-          {(
-            [
-              ['overview', '전체 지도'],
-              ['essay', '자소서'],
-              ['bank', '질문 은행'],
-              ['flags', '위험 표현'],
-            ] as Array<[View, string]>
-          ).map(([v, label]) => (
+        <nav className="views desktop-nav" aria-label="화면 전환">
+          {NAV.map(([v, label]) => (
             <button
               key={v}
               className={view === v ? 'on' : ''}
@@ -178,14 +189,15 @@ export default function App() {
           <button
             className={`mode ${panelOnly ? 'panel' : 'prep'}`}
             onClick={() => setPanelOnly(!panelOnly)}
-            title="면접관이 볼 수 있는 자료만 볼지 전환합니다"
+            title="면접관이 볼 수 있는 자료만"
           >
-            {panelOnly ? '● INTERVIEWER VIEW' : '○ PREP LAB'}
+            {panelOnly ? '면접관' : '전부'}
           </button>
           <button
             className="theme"
             onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}
             title="밝기 전환"
+            aria-label="밝기 전환"
           >
             {theme === 'light' ? '☾' : '☀'}
           </button>
@@ -194,7 +206,7 @@ export default function App() {
 
       {problems.length > 0 && (
         <div className="data-error">
-          <strong>데이터 무결성 경고 {problems.length}건</strong>
+          <strong>데이터 경고 {problems.length}건</strong>
           <ul>
             {problems.slice(0, 5).map((p, i) => (
               <li key={i}>{p}</li>
@@ -218,7 +230,6 @@ export default function App() {
                 title={q.prompt}
               >
                 {q.id.toUpperCase()}
-                <span className="qheat" aria-hidden="true" />
               </button>
             ))}
           </nav>
@@ -227,25 +238,34 @@ export default function App() {
             <input
               className="search"
               type="search"
-              placeholder="표현·질문·근거 검색"
+              placeholder="검색"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               aria-label="검색"
             />
-            <div className="filters" role="group" aria-label="태그 필터">
-              {FILTERS.map((f) => (
-                <button
-                  key={f.id}
-                  className={`chip ${filter === f.id ? 'on' : ''}`}
-                  onClick={() => setFilter(f.id)}
-                  aria-pressed={filter === f.id}
-                >
-                  {f.label}
-                </button>
-              ))}
-            </div>
+            <button
+              type="button"
+              className={`chip filters-toggle ${filtersOpen || filter !== 'ALL' ? 'on' : ''}`}
+              onClick={() => setFiltersOpen((v) => !v)}
+            >
+              필터{filter !== 'ALL' ? ` · ${FILTERS.find((f) => f.id === filter)?.label}` : ''}
+            </button>
+            {filtersOpen && (
+              <div className="filters" role="group" aria-label="태그 필터">
+                {FILTERS.map((f) => (
+                  <button
+                    key={f.id}
+                    className={`chip ${filter === f.id ? 'on' : ''}`}
+                    onClick={() => setFilter(f.id)}
+                    aria-pressed={filter === f.id}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+            )}
             {matchCount !== null && (
-              <span className="match-count">{matchCount}개 일치</span>
+              <span className="match-count">{matchCount}개</span>
             )}
           </div>
         </div>
@@ -291,6 +311,8 @@ export default function App() {
               setSelected(null);
               setView('essay');
             }}
+            onOpenBank={openBank}
+            onOpenFlags={() => setView('flags')}
           />
         )}
 
@@ -300,6 +322,8 @@ export default function App() {
             onToggleStar={starred.toggle}
             onGoto={goto}
             panelOnly={panelOnly}
+            launch={bankLaunch}
+            onLaunchConsumed={() => setBankLaunch(null)}
           />
         )}
 
@@ -312,15 +336,23 @@ export default function App() {
         )}
       </main>
 
+      <nav className="tabbar" aria-label="모바일 메뉴">
+        {NAV.map(([v, label, sub]) => (
+          <button
+            key={v}
+            type="button"
+            className={view === v ? 'on' : ''}
+            onClick={() => setView(v)}
+            aria-current={view === v}
+          >
+            <span className="tabbar-label">{label}</span>
+            <span className="tabbar-sub">{sub}</span>
+          </button>
+        ))}
+      </nav>
+
       <footer className="foot">
-        <p>
-          자기소개서 문장은 원본 PDF 그대로입니다. 근거는 자기소개서·학교생활기록부·탐구보고서·
-          실제 코드에서 직접 확인한 것만 실었습니다. 확인하지 못한 것은 UNKNOWN으로
-          표시했습니다.
-        </p>
-        <p className="foot-privacy">
-          개인정보(주민등록번호·주소·사진·문서확인번호)는 이 앱에 포함하지 않았습니다.
-        </p>
+        <p>자소서 원문 유지 · 확인된 근거만 · UNKNOWN은 모름으로 표시</p>
       </footer>
     </div>
   );

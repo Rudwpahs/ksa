@@ -10,6 +10,7 @@ import { JointAngle } from './JointAngle';
 import { CommitTimeline } from './CommitTimeline';
 import { CareerTimeline } from './CareerTimeline';
 import { VideoAudit } from './VideoAudit';
+import { LundaLoop } from './LundaLoop';
 
 export type VisualId =
   | 'fano'
@@ -22,7 +23,8 @@ export type VisualId =
   | 'joint-angle'
   | 'commit-timeline'
   | 'career-timeline'
-  | 'video-audit';
+  | 'video-audit'
+  | 'lunda-loop';
 
 interface VisualDef {
   title: string;
@@ -41,6 +43,7 @@ const VISUALS: Record<VisualId, VisualDef> = {
   'commit-timeline': { title: '두 프로젝트의 시점', render: () => <CommitTimeline /> },
   'career-timeline': { title: '진로 희망은 어떻게 이어졌나', render: () => <CareerTimeline /> },
   'video-audit': { title: '원본 영상 재분석 — 다시 잴 수 있나', render: () => <VideoAudit /> },
+  'lunda-loop': { title: 'LUNDA — BUILD · TEST · LEARN', render: () => <LundaLoop /> },
 };
 
 export function Visual({ id }: { id: VisualId }) {

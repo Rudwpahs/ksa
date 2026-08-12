@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import type { Priority, QuestionId } from '../types';
 import { details, hotspotById, questionById, questions } from '../data';
 import { PriorityBadge } from './badges';
@@ -9,6 +9,9 @@ interface Props {
   onGoto: (hotspotId: string) => void;
   /** INTERVIEWER VIEW — 답변 핵심을 가리고 PANEL 근거만 남긴 연습 */
   panelOnly?: boolean;
+  /** 직전 화면에서 바로 연습 시작할 때 */
+  launch?: { drill?: boolean; onlyS?: boolean } | null;
+  onLaunchConsumed?: () => void;
 }
 
 type BankMode = 'list' | 'drill';
@@ -35,10 +38,12 @@ export function QuestionBank({
   onToggleStar,
   onGoto,
   panelOnly = false,
+  launch = null,
+  onLaunchConsumed,
 }: Props) {
   const [mode, setMode] = useState<BankMode>('list');
   const [onlyStarred, setOnlyStarred] = useState(false);
-  const [onlyS, setOnlyS] = useState(false);
+  const [onlyS, setOnlyS] = useState(Boolean(launch?.onlyS));
   const [qidFilter, setQidFilter] = useState<'ALL' | QuestionId>('ALL');
   const [revealed, setRevealed] = useState<Set<string>>(new Set());
   const [pressureOpen, setPressureOpen] = useState<Set<string>>(new Set());
@@ -102,6 +107,23 @@ export function QuestionBank({
     setDrillStage('ask');
     setMode('drill');
   };
+
+  // 직전 화면에서 «S급 압박 연습»으로 들어올 때
+  useEffect(() => {
+    if (!launch) return;
+    if (launch.onlyS) setOnlyS(true);
+  }, [launch]);
+
+  useEffect(() => {
+    if (!launch?.drill) return;
+    if (launch.onlyS && !onlyS) return;
+    const order = filtered.map((_, i) => i);
+    setDrillOrder(order);
+    setDrillIdx(0);
+    setDrillStage('ask');
+    setMode('drill');
+    onLaunchConsumed?.();
+  }, [launch, onlyS, filtered, onLaunchConsumed]);
 
   const nextDrill = () => {
     if (drillIdx >= drillRows.length - 1) {

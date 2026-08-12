@@ -494,7 +494,7 @@ export const detailsQ4Q6: Detail[] = [
   {
     id: 'd6-lifetech',
     hotspotId: 'h6-lifetech',
-    visuals: ['career-timeline'],
+    visuals: ['career-timeline', 'lunda-loop'],
     whyItMatters:
       '자소서가 꿈으로 내건 단어인데 정의가 본문에 없다. "라이프테크가 뭔가요?"는 거의 확실히 나온다. 다행히 생기부 2학년 진로활동에 "바이오 기술을 접목한 웨어러블 기기"라는 구체적 아이디어가 기록되어 있어, 추상적인 단어를 실물로 내려앉힐 수 있다. PREP으로는 LUNDA/PR1의 screen-light outdoor audio가 같은 줄기의 현재 사례다.',
     evidenceIds: [
@@ -563,7 +563,7 @@ export const detailsQ4Q6: Detail[] = [
   {
     id: 'd6-integrate',
     hotspotId: 'h6-integrate',
-    visuals: ['career-timeline'],
+    visuals: ['career-timeline', 'lunda-loop'],
     whyItMatters:
       '자소서에서 가장 추상적인 문장이다. 이 문장만 놓고 보면 무엇을 하겠다는 것인지 알 수 없다. 면접관이 "그래서 구체적으로 무엇을 만드나요?"로 곧장 좁혀 들어올 자리다. PREP으로는 자세 분석뿐 아니라 LUNDA/PR1의 "필요한 소리만 연결하고 화면 의존은 줄인다"는 방향으로 구체화할 수 있다.',
     evidenceIds: [
@@ -630,7 +630,7 @@ export const detailsQ4Q6: Detail[] = [
   {
     id: 'd6-revolution',
     hotspotId: 'h6-revolution',
-    visuals: ['career-timeline'],
+    visuals: ['career-timeline', 'lunda-loop'],
     whyItMatters:
       '크게 말한 문장이라 반드시 근거를 요구받는다. 중학생이 "혁명"을 말하는 것 자체는 문제가 아니지만, 지금 실제로 하고 있는 일과 연결되지 않으면 말만 큰 사람으로 보인다. 방어는 큰 말을 키우는 게 아니라 BUILD · TEST · LEARN을 반복하는 현재의 작은 행동으로 낮추는 것이다.',
     evidenceIds: [

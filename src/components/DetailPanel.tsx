@@ -36,9 +36,12 @@ export function DetailPanel({
   const detail = hotspot ? detailForHotspot(hotspot.id) : undefined;
   const [tab, setTab] = useState<Tab>('evidence');
 
-  // 다른 표현으로 옮기면 첫 탭으로 되돌린다
+  // 다른 표현으로 옮기면: 직전 화면에서 그림을 요청했고 그림이 있으면 그림 탭
   useEffect(() => {
-    setTab('evidence');
+    const preferVisual = sessionStorage.getItem('ksa.openVisual') === '1';
+    if (preferVisual) sessionStorage.removeItem('ksa.openVisual');
+    const hasVisual = Boolean(hotspot && detailForHotspot(hotspot.id)?.visuals?.length);
+    setTab(preferVisual && hasVisual ? 'visual' : 'evidence');
   }, [hotspot?.id]);
 
   const evidences = useMemo(() => {
@@ -49,9 +52,9 @@ export function DetailPanel({
       .filter((e) => (panelOnly ? e.visibility === 'PANEL' : true));
   }, [detail, panelOnly]);
 
-  // 면접관 시점에서 숨긴 탭에 머무르지 않게 한다 (early return 전에 호출)
+  // 면접관 시점에서는 모범 답변만 가린다. 그림은 항상 연다.
   useEffect(() => {
-    if (panelOnly && (tab === 'visual' || tab === 'answer')) {
+    if (panelOnly && tab === 'answer') {
       setTab('question');
     }
   }, [panelOnly, tab]);
@@ -92,8 +95,8 @@ export function DetailPanel({
   const visuals = (detail.visuals ?? []) as VisualId[];
   const hiddenCount = panelOnly ? detail.evidenceIds.length - evidences.length : 0;
   const highCount = risks.filter((r) => r.level === 'HIGH').length;
-  // 면접관 시점에서는 그림·이론·모범 답변을 숨기고, PANEL 근거만으로 답하게 한다.
-  const showVisualTab = !panelOnly && visuals.length > 0;
+  // 그림은 면접관 시점에서도 유지. 모범 답변만 가린다.
+  const showVisualTab = visuals.length > 0;
   const showAnswerTab = !panelOnly;
 
   const TABS: Array<{ id: Tab; label: string; count?: number; alert?: boolean }> = [
@@ -126,16 +129,24 @@ export function DetailPanel({
 
         <blockquote className="phrase">{hotspot.exactText}</blockquote>
 
+        <p className="one-liner">
+          <span className="one-liner-tag">한 줄</span>
+          {hotspot.tooltip}
+        </p>
+
         <div className="badge-row tight">
           <PriorityBadge p={hotspot.priority} />
           {highCount > 0 && <RiskBadge level="HIGH" />}
         </div>
 
-        <p className="why">{detail.whyItMatters}</p>
+        <details className="why-fold">
+          <summary>왜 중요한지</summary>
+          <p className="why">{detail.whyItMatters}</p>
+        </details>
 
         {sentence && (
           <details className="in-context">
-            <summary>이 표현이 들어 있는 문장</summary>
+            <summary>원문 문장</summary>
             <p>{sentence.text}</p>
           </details>
         )}
