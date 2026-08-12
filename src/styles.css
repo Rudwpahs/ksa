@@ -3084,18 +3084,10 @@ code {
   font-style: italic;
 }
 
+/* 시트: 배경 잠금은 약하게 — 문장 재선택 가능해야 함 */
 html.sheet-open,
 body.sheet-open {
-  overflow: hidden !important;
-  height: 100%;
   overscroll-behavior: none;
-}
-
-body.sheet-open {
-  position: fixed;
-  inset: 0;
-  width: 100%;
-  touch-action: none;
 }
 
 @media (max-width: 1000px) {
@@ -3119,7 +3111,7 @@ body.sheet-open {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 50;
+    z-index: 70;
     background: var(--surface);
     border-top: 1px solid var(--line);
     padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
@@ -3156,7 +3148,7 @@ body.sheet-open {
   .topbar {
     position: sticky;
     top: 0;
-    z-index: 30;
+    z-index: 40;
     gap: 8px;
     padding: 10px 12px;
     flex-wrap: nowrap;
@@ -3180,16 +3172,20 @@ body.sheet-open {
     max-width: none;
   }
 
+  /* Q1~Q6 메뉴는 시트·스크림보다 위에 — 항상 누를 수 있게 */
   .subbar {
     position: sticky;
     top: 52px;
-    z-index: 25;
+    z-index: 65;
     padding: 8px 10px;
     gap: 8px;
+    background: var(--surface);
   }
 
   .qnav {
+    display: flex;
     gap: 4px;
+    width: 100%;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
@@ -3206,7 +3202,7 @@ body.sheet-open {
   .tools { width: 100%; margin-left: 0; }
   .search { width: 100%; min-height: 40px; }
 
-  .reader-wrap { padding: 10px 8px 24px; }
+  .reader-wrap { padding: 10px 8px 40vh; }
   .reader-head { padding: 14px 14px 12px 40px; }
   .reader-prompt { font-size: 15.5px; line-height: 1.55; }
   .reader-body { padding: var(--lh) 14px var(--lh) 40px; }
@@ -3214,30 +3210,38 @@ body.sheet-open {
   .sentence-no { left: -22px; font-size: 11px; }
   .sentence-text { font-size: 15.5px; }
 
-  /* 시트 열리면 탭바 숨기고 거의 전체 화면 */
-  .app.has-sheet .tabbar {
-    display: none;
-  }
-
+  /* 시트 열려도 하단 탭은 유지 */
   .app.has-sheet {
-    padding-bottom: 0;
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
   }
 
-  .detail {
+  .detail-empty {
+    display: none !important;
+  }
+
+  .detail:not(.detail-empty) {
     position: fixed;
     left: 0;
     right: 0;
-    top: max(8px, env(safe-area-inset-top, 0px));
-    bottom: 0;
-    height: auto;
-    max-height: none;
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    top: auto;
+    height: min(68vh, 580px);
+    max-height: calc(100dvh - 140px);
     border-left: none;
     border-top: 1px solid var(--line);
     border-radius: 18px 18px 0 0;
     box-shadow: 0 -8px 40px rgb(11 38 107 / 22%);
-    z-index: 60;
+    z-index: 55;
+    display: flex;
+    flex-direction: column;
     overscroll-behavior: contain;
-    touch-action: pan-y;
+    background: var(--surface);
+  }
+
+  /* 시트 열린 동안에도 다른 하이라이트 문장 선택 가능 (스크림 위, 시트 아래) */
+  .app.has-sheet .hotspot {
+    position: relative;
+    z-index: 52;
   }
 
   .detail-chrome,
@@ -3258,14 +3262,8 @@ body.sheet-open {
     margin: 4px auto 6px;
   }
 
-  .detail-toolbar {
-    margin-bottom: 6px;
-  }
-
-  .detail-toolbar button {
-    min-height: 36px;
-    padding: 4px 12px;
-  }
+  .detail-toolbar { margin-bottom: 6px; }
+  .detail-toolbar button { min-height: 36px; padding: 4px 12px; }
 
   .phrase {
     margin: 0 0 6px;
@@ -3279,33 +3277,22 @@ body.sheet-open {
     overflow: hidden;
   }
 
-  .badge-row.tight {
-    margin-bottom: 4px;
-  }
-
-  .d-tabs {
-    margin: 0 -4px;
-    padding-bottom: 0;
-  }
+  .badge-row.tight { margin-bottom: 4px; }
 
   .detail-body {
     flex: 1 1 auto;
-    min-height: 55dvh;
+    min-height: 0;
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
-    padding: 12px 14px calc(28px + env(safe-area-inset-bottom, 0px));
+    padding: 12px 14px 20px;
   }
 
   .one-liner {
     margin-bottom: 8px;
     padding: 8px 10px;
     font-size: 13.5px;
-  }
-
-  .why-fold {
-    margin-bottom: 12px;
   }
 
   .d-tabs {
@@ -3317,28 +3304,16 @@ body.sheet-open {
   .d-tabs::-webkit-scrollbar { display: none; }
   .d-tab { flex: none; min-height: 40px; padding: 8px 12px; font-size: 13px; }
 
-  .detail-empty { display: none; }
-
+  /* 스크림: 빈 곳 탭하면 닫힘. 하이라이트(.hotspot z:58)는 그 위에서 선택 */
   .detail-scrim {
     display: block;
     position: fixed;
     inset: 0;
-    background: rgb(11 38 107 / 40%);
-    z-index: 55;
+    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
+    background: rgb(11 38 107 / 18%);
+    z-index: 50;
     border: none;
     padding: 0;
-    touch-action: none;
-  }
-
-  body.sheet-open .reader-wrap,
-  body.sheet-open .subbar,
-  body.sheet-open .topbar {
-    pointer-events: none;
-  }
-
-  body.sheet-open .detail,
-  body.sheet-open .detail * {
-    pointer-events: auto;
   }
 
   .bank-head { flex-direction: column; align-items: flex-start; }

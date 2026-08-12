@@ -121,32 +121,20 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, [step, view]);
 
+  // 시트 열림 표시만 — 본문 클릭(다른 문장)은 막지 않는다
   useEffect(() => {
     const open = view === 'essay' && Boolean(selected);
-    if (!open) {
-      const y = document.body.dataset.scrollY;
-      document.documentElement.classList.remove('sheet-open');
-      document.body.classList.remove('sheet-open');
-      document.body.style.top = '';
-      delete document.body.dataset.scrollY;
-      if (y != null) window.scrollTo(0, Number(y));
-      return;
-    }
-
-    const y = window.scrollY;
-    document.body.dataset.scrollY = String(y);
-    document.documentElement.classList.add('sheet-open');
-    document.body.classList.add('sheet-open');
-    document.body.style.top = `-${y}px`;
-
+    document.documentElement.classList.toggle('sheet-open', open);
+    document.body.classList.toggle('sheet-open', open);
     return () => {
-      const saved = document.body.dataset.scrollY;
       document.documentElement.classList.remove('sheet-open');
       document.body.classList.remove('sheet-open');
-      document.body.style.top = '';
-      delete document.body.dataset.scrollY;
-      if (saved != null) window.scrollTo(0, Number(saved));
     };
+  }, [view, selected]);
+
+  // 자소서를 떠나면 선택 해제 (홈에서 탭바 사라지는 버그 방지)
+  useEffect(() => {
+    if (view !== 'essay' && selected) setSelected(null);
   }, [view, selected]);
 
   const matched = useMemo(() => {
@@ -183,7 +171,7 @@ export default function App() {
   };
 
   return (
-    <div className={`app view-${view}${selected ? ' has-sheet' : ''}`}>
+    <div className={`app view-${view}${view === 'essay' && selected ? ' has-sheet' : ''}`}>
       <header className="topbar">
         <div className="brand">
           <span className="brand-kicker">KSA 3차</span>
@@ -292,14 +280,6 @@ export default function App() {
       <main className={`main view-${view}`}>
         {view === 'essay' && (
           <>
-            {selectedHotspot && (
-              <button
-                type="button"
-                className="detail-scrim"
-                aria-label="상세 닫기"
-                onClick={() => setSelected(null)}
-              />
-            )}
             <div className="reader-wrap">
               <EssayReader
                 question={question}
@@ -308,7 +288,16 @@ export default function App() {
                 onSelect={(h) => setSelected(h.id)}
               />
             </div>
+            {selectedHotspot && (
+              <button
+                type="button"
+                className="detail-scrim"
+                aria-label="상세 닫기"
+                onClick={() => setSelected(null)}
+              />
+            )}
             <DetailPanel
+              key={selectedHotspot?.id ?? 'empty'}
               hotspot={selectedHotspot}
               panelOnly={panelOnly}
               starred={starred.set}
