@@ -3111,7 +3111,7 @@ body.sheet-open {
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 70;
+    z-index: 90;
     background: var(--surface);
     border-top: 1px solid var(--line);
     padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px));
@@ -3148,7 +3148,7 @@ body.sheet-open {
   .topbar {
     position: sticky;
     top: 0;
-    z-index: 40;
+    z-index: 80;
     gap: 8px;
     padding: 10px 12px;
     flex-wrap: nowrap;
@@ -3172,11 +3172,11 @@ body.sheet-open {
     max-width: none;
   }
 
-  /* Q1~Q6 메뉴는 시트·스크림보다 위에 — 항상 누를 수 있게 */
+  /* Q1~Q6 — 하이라이트/시트보다 위 */
   .subbar {
     position: sticky;
     top: 52px;
-    z-index: 65;
+    z-index: 75;
     padding: 8px 10px;
     gap: 8px;
     background: var(--surface);
@@ -3225,23 +3225,25 @@ body.sheet-open {
     right: 0;
     bottom: calc(64px + env(safe-area-inset-bottom, 0px));
     top: auto;
-    height: min(68vh, 580px);
-    max-height: calc(100dvh - 140px);
+    height: min(58vh, 520px);
+    max-height: calc(100dvh - 160px);
     border-left: none;
     border-top: 1px solid var(--line);
     border-radius: 18px 18px 0 0;
     box-shadow: 0 -8px 40px rgb(11 38 107 / 22%);
-    z-index: 55;
+    z-index: 60;
     display: flex;
     flex-direction: column;
     overscroll-behavior: contain;
     background: var(--surface);
   }
 
-  /* 시트 열린 동안에도 다른 하이라이트 문장 선택 가능 (스크림 위, 시트 아래) */
+  /* 스크림만 뚫고, 상단바(80)·서브바(75)·시트(60) 아래 */
   .app.has-sheet .hotspot {
     position: relative;
-    z-index: 52;
+    z-index: 55;
+    scroll-margin-top: 120px;
+    scroll-margin-bottom: calc(64px + env(safe-area-inset-bottom, 0px) + 58vh);
   }
 
   .detail-chrome,
@@ -3304,7 +3306,7 @@ body.sheet-open {
   .d-tabs::-webkit-scrollbar { display: none; }
   .d-tab { flex: none; min-height: 40px; padding: 8px 12px; font-size: 13px; }
 
-  /* 스크림: 빈 곳 탭하면 닫힘. 하이라이트(.hotspot z:58)는 그 위에서 선택 */
+  /* 스크림: 빈 곳 탭하면 닫힘. 하이라이트는 z:55로 그 위 */
   .detail-scrim {
     display: block;
     position: fixed;

@@ -285,7 +285,15 @@ export default function App() {
                 question={question}
                 selectedId={selected}
                 matchedIds={matched}
-                onSelect={(h) => setSelected(h.id)}
+                onSelect={(h) => {
+                  setSelected(h.id);
+                  requestAnimationFrame(() => {
+                    document
+                      .querySelector('.hotspot.is-selected')
+                      ?.scrollIntoView({ block: 'center', behavior: 'smooth' });
+                    document.querySelector('.detail-body')?.scrollTo({ top: 0 });
+                  });
+                }}
               />
             </div>
             {selectedHotspot && (
