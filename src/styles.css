@@ -1258,6 +1258,7 @@ code {
   flex-direction: column;
   border-left: 1px solid var(--line);
   background: var(--surface);
+  overscroll-behavior: contain;
 }
 
 .detail-empty {
@@ -1464,7 +1465,10 @@ code {
 /* 탭 내용 */
 .detail-body {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
   padding: 18px 22px 70px;
 }
 
@@ -3070,8 +3074,18 @@ code {
   font-style: italic;
 }
 
-﻿body.sheet-open {
-  overflow: hidden;
+html.sheet-open,
+body.sheet-open {
+  overflow: hidden !important;
+  height: 100%;
+  overscroll-behavior: none;
+}
+
+body.sheet-open {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  touch-action: none;
 }
 
 @media (max-width: 1000px) {
@@ -3190,23 +3204,36 @@ code {
   .sentence-no { left: -22px; font-size: 11px; }
   .sentence-text { font-size: 15.5px; }
 
+  /* 시트 열리면 탭바 숨기고 거의 전체 화면 */
+  .app.has-sheet .tabbar {
+    display: none;
+  }
+
+  .app.has-sheet {
+    padding-bottom: 0;
+  }
+
   .detail {
     position: fixed;
     left: 0;
     right: 0;
-    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
-    top: auto;
-    height: min(78vh, calc(100dvh - 120px));
+    top: max(8px, env(safe-area-inset-top, 0px));
+    bottom: 0;
+    height: auto;
+    max-height: none;
     border-left: none;
     border-top: 1px solid var(--line);
     border-radius: 18px 18px 0 0;
     box-shadow: 0 -8px 40px rgb(11 38 107 / 22%);
-    z-index: 40;
+    z-index: 60;
+    overscroll-behavior: contain;
+    touch-action: pan-y;
   }
 
   .detail-head {
     padding: 6px 14px 0;
     border-radius: 18px 18px 0 0;
+    flex: none;
   }
 
   .detail-head::before {
@@ -3220,7 +3247,16 @@ code {
   }
 
   .phrase { font-size: 16px; line-height: 1.45; }
-  .detail-body { padding: 14px 14px 24px; }
+
+  .detail-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    padding: 14px 14px calc(28px + env(safe-area-inset-bottom, 0px));
+  }
 
   .d-tabs {
     overflow-x: auto;
@@ -3237,11 +3273,22 @@ code {
     display: block;
     position: fixed;
     inset: 0;
-    bottom: calc(64px + env(safe-area-inset-bottom, 0px));
-    background: rgb(11 38 107 / 32%);
-    z-index: 35;
+    background: rgb(11 38 107 / 40%);
+    z-index: 55;
     border: none;
     padding: 0;
+    touch-action: none;
+  }
+
+  body.sheet-open .reader-wrap,
+  body.sheet-open .subbar,
+  body.sheet-open .topbar {
+    pointer-events: none;
+  }
+
+  body.sheet-open .detail,
+  body.sheet-open .detail * {
+    pointer-events: auto;
   }
 
   .bank-head { flex-direction: column; align-items: flex-start; }

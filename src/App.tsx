@@ -121,14 +121,32 @@ export default function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, [step, view]);
 
-  // 시트가 열린 동안 배경 스크롤 잠금 (모바일)
   useEffect(() => {
-    if (view === 'essay' && selected) {
-      document.body.classList.add('sheet-open');
-    } else {
+    const open = view === 'essay' && Boolean(selected);
+    if (!open) {
+      const y = document.body.dataset.scrollY;
+      document.documentElement.classList.remove('sheet-open');
       document.body.classList.remove('sheet-open');
+      document.body.style.top = '';
+      delete document.body.dataset.scrollY;
+      if (y != null) window.scrollTo(0, Number(y));
+      return;
     }
-    return () => document.body.classList.remove('sheet-open');
+
+    const y = window.scrollY;
+    document.body.dataset.scrollY = String(y);
+    document.documentElement.classList.add('sheet-open');
+    document.body.classList.add('sheet-open');
+    document.body.style.top = `-${y}px`;
+
+    return () => {
+      const saved = document.body.dataset.scrollY;
+      document.documentElement.classList.remove('sheet-open');
+      document.body.classList.remove('sheet-open');
+      document.body.style.top = '';
+      delete document.body.dataset.scrollY;
+      if (saved != null) window.scrollTo(0, Number(saved));
+    };
   }, [view, selected]);
 
   const matched = useMemo(() => {
