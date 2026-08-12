@@ -506,6 +506,107 @@ def bipartite_match(n, can):
     interpretation:
       '제출일을 알아야 GitHub 커밋 중 어디까지가 "지원서 당시 기능"인지 선을 그을 수 있다. 특히 2026년 8월 11일 커밋이 제출 전인지 후인지가 갈린다. 본인이 날짜를 확정해 이 항목을 채워야 한다.',
   },
+
+  // ─────────────────────────────── LUNDA / PR1 / PR2 (PREP 전용)
+  // 면접관이 전형 당일 보는 자료가 아니다. PANEL로 승격하지 않는다.
+  {
+    id: 'lunda-brand-phrases',
+    title: 'LUNDA 브랜드 문구 — screen-light outdoor audio',
+    sourceKind: 'REPORT',
+    visibility: 'PREP',
+    certainty: 'MEASURED',
+    sourceRef:
+      'LUNDA_PR1_AlwaysLinked_MASTER.svg / LUNDA_PR1_FieldSignal_CropStressPreview.png / LUNDA Instagram profile previews (KSA_Cursor_LUNDA_Handoff)',
+    excerpt:
+      'PR1 CONNECTS SOUND, NOT DISTRACTION. LISTEN OUTSIDE. STAY WITH THE PEOPLE AND PLACE AROUND YOU. SCREEN-LIGHT OUTDOOR AUDIO. PHONE DOWN. SOUND ON. STAY PRESENT. Make space for what matters. ALWAYS LINKED / PROTOTYPE 01. PROTOTYPE IN PROGRESS. BUILD · TEST · LEARN. NO BLUETOOTH, NO WIFI, JUST THE SIGNAL.',
+    interpretation:
+      'Q6 "현실과 디지털을 하나로 통합"을 구체화하는 PREP 사례다. 디지털 기능을 늘리는 통합이 아니라, 화면·주의분산을 줄이면서 필요한 소리만 연결해 주변 사람·장소에 머무르게 한다는 방향이다. 완성 제품·사업 성과 근거가 아니며 prototype in progress 이상으로 확대하면 안 된다.',
+  },
+  {
+    id: 'lunda-build-test-learn',
+    title: 'LUNDA 작업 흐름 — IDEA → PROBLEM → BUILD → LEARN',
+    sourceKind: 'REPORT',
+    visibility: 'PREP',
+    certainty: 'MEASURED',
+    sourceRef: 'LUNDA brand narrative materials (THE IDEA / PROBLEM / RESPONSE / PRINCIPLE / WORK / PROJECT / DIRECTION)',
+    excerpt:
+      'THE IDEA / LISTEN → THE PROBLEM / WITHOUT DISTRACTION → THE RESPONSE / MOVE → THE PRINCIPLE / MAKE IT REAL → THE WORK / BUILD → THE PROJECT / PR1 → THE DIRECTION / LEARN. BUILD · TEST · LEARN. PROTOTYPE IN PROGRESS.',
+    interpretation:
+      'Q6 "혁명" 표현을 방어할 때 큰 말을 키우지 않고, 아이디어·문제정의·prototype·build·test·learn을 반복하는 현재의 작은 행동으로 낮추는 PREP 근거다. 면접관에게 프로젝트 이름을 안다고 가정하지 말고, "지금 실제로 하는 일"로만 말한다.',
+  },
+  {
+    id: 'pr1-outdoor-audio',
+    title: 'PR1 — outdoor audio / 화면 의존을 줄이는 문제정의',
+    sourceKind: 'REPORT',
+    visibility: 'PREP',
+    certainty: 'MEASURED',
+    sourceRef: 'PR1 프로젝트 인계 자료 (KSA_PR1_PR2_Interview_Supplement / 01_PR1_STORY.md)',
+    excerpt:
+      '공원·운동장 등에서 스마트폰 화면을 계속 보지 않고도 필요한 오디오를 듣는 장거리 무선 오디오 프로토타입. Bluetooth/Wi‑Fi를 쓰지 않는 방향. 송신기 1대 ↔ 수신기 1대. 초기 예산 약 15만 원. 첫 목표는 상품 완성이 아니라 실제 하드웨어 종단간 PoC. 제품 철학: 소리는 연결하되, 화면과 주의분산은 줄이자.',
+    interpretation:
+      '라이프테크·통합 문장을 "기능을 더 붙이는 제품"이 아니라 "현실의 행동을 덜 방해하면서 필요한 도움만 주는 기술"로 내려앉히는 현재 프로젝트 사례다. PANEL 자료가 아니므로 면접관이 PR1을 이미 안다고 전제한 질문을 만들지 않는다.',
+  },
+  {
+    id: 'pr1-packet-constraint',
+    title: 'PR1 — 654 B packet 제약 발견과 설계 수정',
+    sourceKind: 'REPORT',
+    visibility: 'PREP',
+    certainty: 'MEASURED',
+    sourceRef: 'PR1 프로젝트 인계 자료 — 사전 검증·Day 13 압축 후보',
+    excerpt:
+      '초기 설계: 32 kHz / 16-bit / mono / 10 ms frame / 640 B PCM + 14 B header = 총 654 B application packet, 약 100 packets/s. 654 B가 실제 SX1280 계열 RF packet 하나에 들어가지 않는다는 문제가 드러남. 대응: 설계를 고집하지 않음 → 제약을 숫자로 재확인 → 압축/분할 후보 검토 → 예상 payload가 아니라 encoder 실제 반환값을 쓰도록 설계. Day 13 후보: 24 kHz mono 10 ms Opus VOIP 48 kbps hard CBR, DTX off, FEC off.',
+    interpretation:
+      '실패·검증 인성 질문용 PREP 증거다. 기술 이름을 길게 설명하지 말고, "생각이 틀렸을 때 고집하지 않고 숫자로 다시 확인한 뒤 설계를 바꿨다"는 행동 증거로만 쓴다.',
+  },
+  {
+    id: 'pr1-verified-vs-unknown',
+    title: 'PR1 — localhost 성공 ≠ 실제 RF / GO·NO-GO 판정',
+    sourceKind: 'REPORT',
+    visibility: 'PREP',
+    certainty: 'MEASURED',
+    sourceRef: 'PR1 프로젝트 인계 자료 — 검증한 것 / 안 한 것 · Gate 방식',
+    excerpt:
+      '검증: localhost UDP 10,000 packets, missing=0, 약 100 packets/s, PC 소프트웨어 구조 일부. 미검증: 실제 SX1280 RF 성능, 실제 ESP32-S3 실시간 Opus, 안테나/벽/사람에 의한 손실, 실제 오디오 지연, 발열/전력/장시간 안정성. 판정: 하드웨어 검증 GO / 양산 NO-GO. Gate: 부품 확인 → 보드 bring-up → RF ping → 로컬 오디오 → on-device Opus → 압축 패킷 RF 전송 → 실시간 재생 → 종단간 측정.',
+    interpretation:
+      '모르는 것을 인정하고, 원하는 결론보다 실제 상태를 우선하는 태도 증거다. localhost 성공을 실제 RF 성공처럼 말하면 안 된다. 규정·안전도 제품 설계의 일부로 본다는 점까지 연결할 수 있다.',
+  },
+  {
+    id: 'pr2-ai-autonomy',
+    title: 'PR2 — AI 개입과 사용자 자율성 (본인 진술 복원)',
+    sourceKind: 'USER_NOTE',
+    visibility: 'PREP',
+    certainty: 'UNKNOWN',
+    sourceRef:
+      '이전 대화에서 사용자가 직접 제시한 아이디어 복원 (KSA_PR1_PR2_Interview_Supplement / 03_PR2_STORY.md). 하드웨어·성능 문서는 미확보',
+    excerpt:
+      'Meta 계열 안경 같은 웨어러블과 경쟁해야 하는가? JARVIS 같은 assistant AI가 들어갈 수 있는가? 사용자가 항상 AI와 연결되어 있기를 원할까? 개인시간/비개입 모드가 필요하지 않을까? "개인시간을 가지고 싶을 수도 있잖아."',
+    interpretation:
+      '자소서 Q6의 "AI 없이는 살아가기 어려운 세상"에서 이어질 수 있는 PREP 사고실험이다. "무엇을 더 할 수 있는 AI인가"뿐 아니라 "언제 물러나야 하는 AI인가"를 묻는다. PR2의 센서·배터리·통신·완성도·성능은 확정하지 않는다.',
+  },
+  {
+    id: 'pr2-wearable-form',
+    title: 'PR2 — 착용 위치·형태 탐색 (본인 진술 복원)',
+    sourceKind: 'USER_NOTE',
+    visibility: 'PREP',
+    certainty: 'UNKNOWN',
+    sourceRef: '이전 대화 기반 복원 — 귀에 손을 대며 확인한 착용감·주변음 탐색',
+    excerpt:
+      '귀 주변/귓바퀴 안쪽에 매우 얇게 들어가는 오디오·AI 보조 장치 아이디어. snug 부근, antitragus 방향, inner concha 안쪽, 얇고 반투명한 형태, 주변음 차단감을 실제 귀에 손을 대보며 확인하며 아이디어를 수정.',
+    interpretation:
+      '성능 수치나 완성된 prototype이 아니라, 착용감·주변음·존재감도 설계 조건으로 본다는 태도 증거다. 구체 하드웨어를 발명해서 말하면 안 된다.',
+  },
+  {
+    id: 'note-pr1-pr2-common',
+    title: 'PR1·PR2 공통 방향 — 필요할 때만 존재하는 기술',
+    sourceKind: 'USER_NOTE',
+    visibility: 'PREP',
+    certainty: 'INFERRED',
+    sourceRef: 'PR1·PR2 교차 정리 (05_CROSS_PROJECT_VALUES.md). 공식 좌우명이 아님',
+    excerpt:
+      '좋은 기술은 사용자의 시간을 더 많이 차지하는 기술이 아니라, 필요할 때 도움을 주고 필요하지 않을 때 물러날 수 있는 기술이다.',
+    interpretation:
+      '두 프로젝트에서 드러나는 공통 방향으로만 쓴다. 공식 슬로건처럼 단정하지 않는다. PR1의 화면 의존 감소와 PR2의 AI 비개입·개인시간이 같은 줄기에 있다.',
+  },
 ];
 
 export const evidenceById = new Map(evidence.map((e) => [e.id, e]));

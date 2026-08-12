@@ -473,8 +473,14 @@ export const detailsQ4Q6: Detail[] = [
     hotspotId: 'h6-lifetech',
     visuals: ['career-timeline'],
     whyItMatters:
-      '자소서가 꿈으로 내건 단어인데 정의가 본문에 없다. "라이프테크가 뭔가요?"는 거의 확실히 나온다. 다행히 생기부 2학년 진로활동에 "바이오 기술을 접목한 웨어러블 기기"라는 구체적 아이디어가 기록되어 있어, 추상적인 단어를 실물로 내려앉힐 수 있다.',
-    evidenceIds: ['sr-career-2', 'sr-career-1'],
+      '자소서가 꿈으로 내건 단어인데 정의가 본문에 없다. "라이프테크가 뭔가요?"는 거의 확실히 나온다. 다행히 생기부 2학년 진로활동에 "바이오 기술을 접목한 웨어러블 기기"라는 구체적 아이디어가 기록되어 있어, 추상적인 단어를 실물로 내려앉힐 수 있다. PREP으로는 LUNDA/PR1의 screen-light outdoor audio가 같은 줄기의 현재 사례다.',
+    evidenceIds: [
+      'sr-career-2',
+      'sr-career-1',
+      'lunda-brand-phrases',
+      'pr1-outdoor-audio',
+      'note-pr1-pr2-common',
+    ],
     myRole: ['1학년 IT 및 공학 분야 CEO → 2학년 IT 전문 기업 경영자로 진로 희망이 이어진다.'],
     risks: [
       {
@@ -488,6 +494,12 @@ export const detailsQ4Q6: Detail[] = [
         text: '"사업에 성공하는 것"이 꿈이면 기술보다 성공 자체가 목적으로 들릴 수 있다.',
         saferPhrasing: '해결하려는 문제를 먼저 말하고 사업은 수단으로 배치한다.',
       },
+      {
+        level: 'WATCH',
+        text: 'LUNDA/PR1을 이미 완성된 사업·제품처럼 말하면 과장이다. 면접관은 전형 자료에서 이 이름을 보지 못한다.',
+        saferPhrasing:
+          '"지금 개인적으로 만들고 있는 outdoor audio 프로토타입"처럼 PREP 사례로만 소개하고, prototype in progress임을 먼저 밝힌다.',
+      },
     ],
     questions: [
       {
@@ -500,7 +512,10 @@ export const detailsQ4Q6: Detail[] = [
         id: 'q-d6-lifetech-2',
         text: '라이프테크로 해결하고 싶은 구체적인 문제 하나를 말해 주세요.',
         trigger: '자소서가 통합이라는 방향만 말하고 문제를 특정하지 않았다.',
-        followups: ['그 문제는 지금 왜 해결되지 않고 있나요?'],
+        followups: [
+          '그 문제는 지금 왜 해결되지 않고 있나요?',
+          '지금 그 문제에 대해 실제로 하고 있는 일이 있나요?',
+        ],
       },
       {
         id: 'q-d6-lifetech-3',
@@ -511,30 +526,38 @@ export const detailsQ4Q6: Detail[] = [
     answerCore20s: [
       '제가 쓰는 뜻은 생활 속 행동을 데이터로 읽어 다시 생활을 돕는 기술입니다.',
       '2학년 진로활동 때 바이오 기술을 접목한 웨어러블을 제안한 적이 있습니다.',
-      '지금 만드는 자세 분석 프로그램도 같은 줄기에 있다고 생각합니다.',
+      '지금은 화면을 덜 보면서도 필요한 소리만 연결하는 outdoor audio 프로토타입을 만들고 있습니다.',
     ],
     answerFrame60s: [
       '정의 먼저 (내가 쓰는 뜻)',
-      '근거: 2학년 진로활동 웨어러블 아이디어, 1·2학년 진로 희망 일관',
-      '지금의 연습: 자세 분석 = 몸의 움직임을 데이터로 읽는 일',
-      '문제 하나로 좁히기',
+      'PANEL 근거: 2학년 진로활동 웨어러블 아이디어, 1·2학년 진로 희망 일관',
+      'PREP 현재 사례: LUNDA/PR1 — 소리는 연결, 화면·주의분산은 줄이기 (prototype in progress)',
+      '문제 하나로 좁히기: 디지털 기능을 늘리는 게 아니라 현실 행동을 덜 방해하기',
       '사업은 목적이 아니라 그 문제를 널리 닿게 하는 수단',
     ],
-    relatedHotspots: ['h6-integrate', 'h4-ml'],
+    relatedHotspots: ['h6-integrate', 'h6-revolution', 'h4-ml'],
   },
   {
     id: 'd6-integrate',
     hotspotId: 'h6-integrate',
     visuals: ['career-timeline'],
     whyItMatters:
-      '자소서에서 가장 추상적인 문장이다. 이 문장만 놓고 보면 무엇을 하겠다는 것인지 알 수 없다. 면접관이 "그래서 구체적으로 무엇을 만드나요?"로 곧장 좁혀 들어올 자리다.',
-    evidenceIds: ['sr-career-2', 'gh-yoga-pretrained', 'gh-shoot-readme'],
+      '자소서에서 가장 추상적인 문장이다. 이 문장만 놓고 보면 무엇을 하겠다는 것인지 알 수 없다. 면접관이 "그래서 구체적으로 무엇을 만드나요?"로 곧장 좁혀 들어올 자리다. PREP으로는 자세 분석뿐 아니라 LUNDA/PR1의 "필요한 소리만 연결하고 화면 의존은 줄인다"는 방향으로 구체화할 수 있다.',
+    evidenceIds: [
+      'sr-career-2',
+      'gh-yoga-pretrained',
+      'gh-shoot-readme',
+      'lunda-brand-phrases',
+      'pr1-outdoor-audio',
+      'pr2-ai-autonomy',
+      'note-pr1-pr2-common',
+    ],
     risks: [
       {
         level: 'WATCH',
         text: '"현실과 디지털의 통합"은 누구나 할 수 있는 말이다. 본인 경험으로 내려오지 않으면 점수가 되지 않는다.',
         saferPhrasing:
-          '"제가 만든 자세 분석이 딱 그 예입니다. 몸의 움직임이라는 현실을 좌표로 바꿔 다시 사람에게 돌려주는 일이었습니다."',
+          '"디지털 기능을 계속 늘리는 통합이 아니라, 현실의 행동을 덜 방해하면서 필요한 도움만 주는 쪽입니다. outdoor audio 프로토타입이 그 예입니다."',
       },
     ],
     questions: [
@@ -542,33 +565,72 @@ export const detailsQ4Q6: Detail[] = [
         id: 'q-d6-integrate-1',
         text: '현실과 디지털을 통합한다는 것이 구체적으로 무엇을 만든다는 뜻인가요?',
         trigger: '자소서 Q6의 핵심 주장이지만 예시가 없다.',
-        followups: ['이미 그런 제품이 있지 않나요? 무엇이 다른가요?'],
+        followups: [
+          '이미 그런 제품이 있지 않나요? 무엇이 다른가요?',
+          '지금 그 방향으로 실제로 만들고 있는 것이 있나요?',
+        ],
       },
       {
         id: 'q-d6-integrate-2',
-        text: 'AI가 더 발전하면 본인이 만들고 싶은 제품의 역할은 무엇인가요?',
+        text: 'AI가 더 발전하면 본인이 만들고 싶은 기술의 역할은 무엇인가요?',
         trigger: '"AI 없이는 살아가기 어려운 세상"이라는 문장을 스스로 썼다.',
+        followups: [
+          'AI가 모든 선택을 도와주는 것이 좋은가요?',
+          '사용자가 AI 도움을 원하지 않는 순간에는 어떻게 해야 하나요?',
+        ],
+      },
+      {
+        id: 'q-d6-integrate-3',
+        text: '편리함과 자율성이 충돌하면 어느 쪽을 우선하나요?',
+        trigger:
+          '자소서가 AI 의존이 커진 세상을 전제로 통합을 말했다. 기술의 개입 범위를 묻는다.',
+        followups: [
+          'AI가 너무 많이 개입하면 무엇이 문제인가요?',
+          '기술이 중독을 만들면 개발자 책임은 어디에 있나요?',
+        ],
       },
     ],
     answerCore20s: [
-      '제가 만든 요가·슈팅 자세 분석이 작은 예라고 생각합니다.',
-      '몸의 움직임을 좌표로 바꾸고, 그 결과를 다시 사람이 쓸 수 있게 돌려주는 일입니다.',
-      '그 폭을 넓히는 것이 제가 말한 통합입니다.',
+      '제가 말한 통합은 디지털을 더 붙이는 일이 아니라, 현실의 행동을 덜 방해하면서 필요한 도움만 주는 쪽입니다.',
+      '자세 분석은 몸의 움직임을 좌표로 바꿔 다시 사람에게 돌려주는 작은 예입니다.',
+      '지금은 화면을 보지 않고도 필요한 소리만 듣게 하는 outdoor audio 프로토타입으로 같은 방향을 시험하고 있습니다.',
     ],
-    relatedHotspots: ['h6-lifetech', 'h4-mediapipe'],
+    answerFrame60s: [
+      'PANEL 문구에서 출발: "현실과 디지털을 하나로 통합"',
+      '해석을 낮춤: 기능 확장이 아니라 주의분산·화면 의존을 줄이는 통합',
+      '작은 예 1: 요가·슈팅 자세 분석',
+      '작은 예 2 (PREP): LUNDA/PR1 — PHONE DOWN. SOUND ON. STAY PRESENT. (prototype)',
+      'AI 인성: 무엇을 더 하는 AI보다 언제 물러나는 AI를 생각함 (PR2 사고)',
+    ],
+    relatedHotspots: ['h6-lifetech', 'h6-revolution', 'h4-mediapipe'],
   },
   {
     id: 'd6-revolution',
     hotspotId: 'h6-revolution',
     visuals: ['career-timeline'],
     whyItMatters:
-      '크게 말한 문장이라 반드시 근거를 요구받는다. 중학생이 "혁명"을 말하는 것 자체는 문제가 아니지만, 지금 실제로 하고 있는 일과 연결되지 않으면 말만 큰 사람으로 보인다.',
-    evidenceIds: ['sr-career-2', 'sr-club-seat', 'gh-yoga-history'],
+      '크게 말한 문장이라 반드시 근거를 요구받는다. 중학생이 "혁명"을 말하는 것 자체는 문제가 아니지만, 지금 실제로 하고 있는 일과 연결되지 않으면 말만 큰 사람으로 보인다. 방어는 큰 말을 키우는 게 아니라 BUILD · TEST · LEARN을 반복하는 현재의 작은 행동으로 낮추는 것이다.',
+    evidenceIds: [
+      'sr-career-2',
+      'sr-club-seat',
+      'gh-yoga-history',
+      'lunda-build-test-learn',
+      'pr1-packet-constraint',
+      'pr1-verified-vs-unknown',
+      'pr2-wearable-form',
+    ],
     risks: [
       {
         level: 'WATCH',
         text: '근거 없는 큰 표현. 면접관은 "지금 무엇을 하고 있나요?"로 곧바로 확인한다.',
-        saferPhrasing: '큰 말 뒤에 반드시 지금 하고 있는 작은 일을 붙인다.',
+        saferPhrasing:
+          '큰 말 뒤에 반드시 지금 하고 있는 작은 일(prototype, build·test·learn)을 붙인다.',
+      },
+      {
+        level: 'HIGH',
+        text: 'localhost 성공을 실제 RF 성공처럼, prototype을 완성품처럼 말하면 신뢰가 깨진다.',
+        saferPhrasing:
+          '"PC에서는 패킷이 빠지지 않았지만, 실제 RF·지연·발열은 아직 미검증입니다. 하드웨어 검증 GO, 양산은 NO-GO입니다"처럼 경계를 먼저 말한다.',
       },
     ],
     questions: [
@@ -576,15 +638,41 @@ export const detailsQ4Q6: Detail[] = [
         id: 'q-d6-revolution-1',
         text: '혁명이라고 표현했는데, 그 첫 단계로 지금 하고 있는 일은 무엇인가요?',
         trigger: '자소서 Q6이 "하나의 혁명을 끌어나가고 싶습니다"라고 썼다.',
-        followups: ['그중 실제로 끝까지 완성한 것은 무엇인가요?'],
+        followups: [
+          '그중 실제로 끝까지 완성한 것은 무엇인가요?',
+          '실패했을 때는 어떻게 하나요?',
+        ],
+      },
+      {
+        id: 'q-d6-revolution-2',
+        text: '본인 아이디어가 틀렸다는 증거가 나오면 어떻게 하나요?',
+        trigger:
+          '자소서가 큰 꿈을 말했으므로, 생각이 틀렸을 때의 태도를 인성으로 확인한다.',
+        followups: [
+          '모르는 것을 인정할 수 있나요?',
+          '원하는 결과가 안 나오면 무엇을 먼저 바꾸나요?',
+        ],
+      },
+      {
+        id: 'q-d6-revolution-3',
+        text: '좋은 기술이란 무엇이라고 생각하나요?',
+        trigger: '자소서 Q6이 기술·사업·통합을 한꺼번에 말한다. 가치관을 묻는다.',
+        followups: ['규정이나 안전 때문에 구현이 어려우면 어떻게 하나요?'],
       },
     ],
     answerCore20s: [
-      '말은 크게 했지만 지금 하는 일은 작습니다.',
-      '요가 자세 프로그램은 2022년부터 계속 고쳐 왔고, 자리 배치는 동아리에서 실제로 배포까지 했습니다.',
-      '끝까지 만들어 본 경험을 늘려 가는 중입니다.',
+      '말은 크게 했지만 지금 하는 일은 작습니다. 아이디어를 prototype으로 만들고 build·test·learn을 반복하는 중입니다.',
+      '무선 오디오를 설계하다가 654바이트 패킷이 실제 RF에 안 들어간다는 제약을 발견하고, 설계를 고집하지 않고 바꿨습니다.',
+      'localhost에서 패킷이 안 빠졌다고 실제 RF 성공으로 말하지 않습니다. 하드웨어 검증은 GO, 양산은 NO-GO입니다.',
     ],
-    relatedHotspots: ['h6-lifetech', 'h4-seat'],
+    answerFrame60s: [
+      '큰 말 인정 → 바로 작은 행동으로 낮춤',
+      '지금 하는 일: outdoor audio prototype / BUILD · TEST · LEARN',
+      '실패 증거: 654 B packet 제약 → 압축·분할 검토 (기술 나열보다 태도)',
+      '검증 경계: localhost ≠ RF, 미검증(지연·발열·안테나) 명시',
+      'PANEL로도 말할 수 있는 병행 사례: 자리배치 배포, 요가 프로그램 장기 개선',
+    ],
+    relatedHotspots: ['h6-lifetech', 'h6-integrate', 'h4-seat'],
   },
   {
     id: 'd6-ksa',

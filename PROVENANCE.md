@@ -154,3 +154,19 @@ KSA_Work_GitHub_Handoff/sources/
   04_experiment_videos.zip            실험 영상 11개
   05_seat_matching_source.zip         자리배치 원본 소스
 ```
+
+---
+
+## 7. LUNDA / PR1 / PR2 추가 (2026-08-13)
+
+`KSA_Cursor_LUNDA_Handoff` 기준으로 Q6 PREP 사례은행만 보강했다. UI·자소서·생기부 원문은 변경하지 않았다.
+
+| 자료 | 상태 | 앱에서의 취급 |
+| --- | --- | --- |
+| LUNDA 브랜드 문구 (SVG/PNG) | VERIFIED / MEASURED | PREP only — `lunda-brand-phrases`, `lunda-build-test-learn` |
+| PR1 인계 스토리 (패킷 제약, GO/NO-GO) | VERIFIED / MEASURED | PREP only — `pr1-*` |
+| PR2 (AI 자율성, 착용 탐색) | USER-STATED / UNKNOWN | PREP only — `pr2-*`. 하드웨어·성능 발명 금지 |
+| 공통 가치 문장 | INFERRED | `note-pr1-pr2-common` — 공식 좌우명처럼 쓰지 않음 |
+
+연결 위치: `d6-lifetech`, `d6-integrate`, `d6-revolution`.
+PANEL 승격 금지. 면접관이 LUNDA/PR1/PR2 이름을 안다고 가정한 질문은 만들지 않았다.
