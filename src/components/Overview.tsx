@@ -37,10 +37,33 @@ export function Overview({ onGoto, onOpenQuestion }: Props) {
       <header className="ov-head">
         <h2>전체 지도</h2>
         <p className="bank-note">
-          어느 문항이 위험한지, 면접관이 볼 수 있는 근거가 얼마나 있는지 먼저 보고 들어가세요.
-          막대는 정정해야 할 표현의 수입니다.
+          한과영 3차는 제출 서류(자소서·생기부)를 깊게 파고든 뒤, 모르는 척·과장·협업 경계가
+          흐린 지점을 꼬리질문으로 확인합니다. 어느 문항이 위험한지, PANEL 근거가 있는지 먼저
+          보고 들어가세요.
         </p>
       </header>
+
+      <section className="ov-path" aria-label="오늘 필수 경로">
+        <h3 className="ov-path-title">오늘 필수 경로</h3>
+        <p className="ov-path-note">
+          구두 증명(Q1) → 측정 정직성(Q3) → 협업·알고리즘(Q4) → 왜 KSA(Q6). 이 네 지점이
+          면접에서 가장 자주 묶입니다.
+        </p>
+        <div className="ov-path-row">
+          {(
+            [
+              ['h1-fano', 'Q1 파노'],
+              ['h3-mu', 'Q3 Δx≠μ'],
+              ['h4-seat', 'Q4 자리배치'],
+              ['h6-ksa', 'Q6 왜 KSA'],
+            ] as const
+          ).map(([id, label]) => (
+            <button key={id} className="ov-path-chip" onClick={() => onGoto(id)}>
+              {label}
+            </button>
+          ))}
+        </div>
+      </section>
 
       <div className="ov-grid">
         {rows.map(({ q, spots, high, watch, qs, panel, prep }) => (

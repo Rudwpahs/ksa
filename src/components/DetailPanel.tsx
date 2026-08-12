@@ -49,6 +49,13 @@ export function DetailPanel({
       .filter((e) => (panelOnly ? e.visibility === 'PANEL' : true));
   }, [detail, panelOnly]);
 
+  // 면접관 시점에서 숨긴 탭에 머무르지 않게 한다 (early return 전에 호출)
+  useEffect(() => {
+    if (panelOnly && (tab === 'visual' || tab === 'answer')) {
+      setTab('question');
+    }
+  }, [panelOnly, tab]);
+
   if (!hotspot || !detail) {
     return (
       <aside className="detail detail-empty">
@@ -85,15 +92,18 @@ export function DetailPanel({
   const visuals = (detail.visuals ?? []) as VisualId[];
   const hiddenCount = panelOnly ? detail.evidenceIds.length - evidences.length : 0;
   const highCount = risks.filter((r) => r.level === 'HIGH').length;
+  // 면접관 시점에서는 그림·이론·모범 답변을 숨기고, PANEL 근거만으로 답하게 한다.
+  const showVisualTab = !panelOnly && visuals.length > 0;
+  const showAnswerTab = !panelOnly;
 
   const TABS: Array<{ id: Tab; label: string; count?: number; alert?: boolean }> = [
     { id: 'evidence', label: '근거', count: evidences.length },
-    ...(visuals.length > 0
+    ...(showVisualTab
       ? [{ id: 'visual' as Tab, label: '그림으로', count: visuals.length }]
       : []),
     { id: 'risk', label: '위험', count: risks.length, alert: highCount > 0 },
     { id: 'question', label: '질문', count: detail.questions.length },
-    { id: 'answer', label: '답변' },
+    ...(showAnswerTab ? [{ id: 'answer' as Tab, label: '답변' }] : []),
   ];
 
   return (
@@ -242,6 +252,12 @@ export function DetailPanel({
 
         {tab === 'question' && (
           <>
+            {panelOnly && (
+              <p className="note-line boxed">
+                INTERVIEWER VIEW — 모범 답변은 가려 두었습니다. 아래 질문을 PANEL 근거만으로
+                소리 내어 답해 보세요. 꼬리질문까지 버틴 뒤 PREP LAB으로 전환해 점검하세요.
+              </p>
+            )}
             {detail.questions.map((q) => (
               <div className="eq" key={q.id}>
                 <div className="eq-head">

@@ -42,7 +42,7 @@ function readHash(): { q: QuestionId; h: string | null } {
 
 export default function App() {
   const initial = readHash();
-  const [view, setView] = useState<View>('essay');
+  const [view, setView] = useState<View>('overview');
   const [qid, setQid] = useState<QuestionId>(initial.q);
   const [selected, setSelected] = useState<string | null>(initial.h);
   const [query, setQuery] = useState('');
@@ -254,6 +254,14 @@ export default function App() {
       <main className={`main view-${view}`}>
         {view === 'essay' && (
           <>
+            {selectedHotspot && (
+              <button
+                type="button"
+                className="detail-scrim"
+                aria-label="상세 닫기"
+                onClick={() => setSelected(null)}
+              />
+            )}
             <div className="reader-wrap">
               <EssayReader
                 question={question}
@@ -291,6 +299,7 @@ export default function App() {
             starred={starred.set}
             onToggleStar={starred.toggle}
             onGoto={goto}
+            panelOnly={panelOnly}
           />
         )}
 
