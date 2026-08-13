@@ -15,6 +15,7 @@ import { DetailPanel } from './components/DetailPanel';
 import { QuestionBank } from './components/QuestionBank';
 import { RedFlagView } from './components/RedFlagView';
 import { Overview } from './components/Overview';
+import { PdfDownloadButton } from './components/PdfDownloadButton';
 import { useIdSet, useLocalStorage } from './hooks/useLocalStorage';
 import './styles.css';
 
@@ -204,6 +205,7 @@ export default function App() {
         </nav>
 
         <div className="topbar-right">
+          <PdfDownloadButton />
           <button
             className={`mode ${panelOnly ? 'panel' : 'prep'}`}
             onClick={() => setPanelOnly(!panelOnly)}
