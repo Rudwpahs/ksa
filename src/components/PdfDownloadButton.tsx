@@ -127,7 +127,7 @@ export function PdfDownloadButton() {
     <>
       <button
         type="button"
-        className="pdf-download"
+        className="mode pdf-download"
         onClick={download}
         disabled={busy}
         title="A4 면접 준비 책자를 PDF로 저장"
